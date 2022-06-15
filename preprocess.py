@@ -7,7 +7,7 @@ def prepr(data, isdf=None, stop_words=[]):
     if stop_words is None:
         stop_words = []
     if isdf:
-        nlp = spacy.load("ru_core_news_lg")
+        nlp = spacy.load("ru_core_news_sm")
 
         df = data.dropna()
 

@@ -13,6 +13,10 @@ from imblearn.over_sampling import SMOTE
 
 from try_again_ml import preprocess1
 
+# noise = ['роботает', 'объяснить', 'рождение', 'приходиться', 'низкий', 'информация', 'место', 'подскажите', 'огромный', 'здравствовать', 'нету', 'быстрее', 'оплата', 'слишком', 'перевести', 'посоветовать', 'никакой', 'почините', 'спрашивать', 'час', 'неделя', 'пополнить', 'ещё', 'продать', 'месяц', 'ли']
+
+# noise = open('stop_words.txt', mode='r', encoding='utf-8').read().splitlines()
+
 messages, y = prepr(pd.read_csv('data.csv'), True)
 
 print(messages[-1], y[-1])
@@ -75,9 +79,28 @@ for inp, prediction, label in zip(x_test, predictions, y_test):
                     counter1[word] = list(line).count(word)
 
 sort1 = {k: v for k, v in sorted(counter1.items(), key=lambda item: item[1])}
-
+k1 = list(sort1.keys())
+v1 = list(sort1.values())
+k = list(sort.keys())
+v = list(sort.values())
 max_ = max(len(sort1), len(sort1))
-for i in range(max_):
-    print(sort[sort.keys()[i]])
 
-# noise = ['а', 'и', 'я', 'не', 'в', 'с', 'у', 'на', 'что', 'здравствовать', 'нету', 'же', 'т', 'ли', 'по', 'о', 'тот', 'как', 'это', 'вы', 'но', 'уже']
+newdict = []
+
+for key in sort1:
+    try:
+        if int(v1[k1.index(key)] / v[k.index(key)]) < 5:
+            newdict.append('CORRECT: ' + str(k1[k1.index(key)]) + ':' + str(v1[k1.index(key)]) + ' INCORRECT: ' + str(k[k.index(key)]) + ':' + str(v[k.index(key)]))
+    except:
+        newdict.append('CORRECT: '+ str(k1[k1.index(key)]) + ':' + str(v1[k1.index(key)]))
+
+for line in newdict:
+    print(line)
+# for i in range(max_):
+#     try:
+#         print('INCORRECT: ', k[i], ': ',  v[i],'; ', 'CORRECT: ', k1[i],':',  v1[i])
+#     except:
+#         print(k1[i],': ', v1[i])
+with open('stop_words.txt', mode='a', encoding='utf-8') as f:
+    for line in newdict:
+        f.write(line.split(':')[1].strip() + '\n')
