@@ -1,12 +1,13 @@
 import re
 import spacy
 
-def prepr(data, isdf=None, stop_words=[], labels_=None, exclude=None, max_words=1000000):
+def prepr(data, isdf=None, stop_words=[], labels_=None, exclude=None, max_words=None, model='ru_core_news_lg'):
     if stop_words is None:
         stop_words = []
     if isdf:
-        nlp = spacy.load("ru_core_news_lg")
-        nlp.max_length = max_words
+        nlp = spacy.load(model)
+        if max_words is not None:
+            nlp.max_length = max_words
 
         df = data.dropna()
 
