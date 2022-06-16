@@ -15,13 +15,13 @@ from try_again_ml import preprocess1
 
 # noise = ['роботает', 'объяснить', 'рождение', 'приходиться', 'низкий', 'информация', 'место', 'подскажите', 'огромный', 'здравствовать', 'нету', 'быстрее', 'оплата', 'слишком', 'перевести', 'посоветовать', 'никакой', 'почините', 'спрашивать', 'час', 'неделя', 'пополнить', 'ещё', 'продать', 'месяц', 'ли']
 
-# noise = open('stop_words.txt', mode='r', encoding='utf-8').read().splitlines()
+noise = open('stop_words.txt', mode='r', encoding='utf-8').read().splitlines()
 
-messages, y = prepr(pd.read_csv('data.csv'), True)
+messages, y = prepr(pd.read_csv('data.csv'), True, noise)
 
-print(messages[-1], y[-1])
+# print(messages, y)
 
-Tf = TfidfVectorizer( sublinear_tf=True)
+Tf = TfidfVectorizer(sublinear_tf=True)
 vec = Tf.fit(messages)
 X = vec.transform(messages)
 
@@ -89,18 +89,21 @@ newdict = []
 
 for key in sort1:
     try:
-        if int(v1[k1.index(key)] / v[k.index(key)]) < 5:
-            newdict.append('CORRECT: ' + str(k1[k1.index(key)]) + ':' + str(v1[k1.index(key)]) + ' INCORRECT: ' + str(k[k.index(key)]) + ':' + str(v[k.index(key)]))
+        if v1[k1.index(key)] / v[k.index(key)] < 2:
+            newdict.append('CORRECT: ' + str(k1[k1.index(key)]) + ':' + str(v1[k1.index(key)]) + ' INCORRECT: ' + str(
+                k[k.index(key)]) + ':' + str(v[k.index(key)]))
     except:
-        newdict.append('CORRECT: '+ str(k1[k1.index(key)]) + ':' + str(v1[k1.index(key)]))
+        pass
 
 for line in newdict:
     print(line)
+
 # for i in range(max_):
 #     try:
 #         print('INCORRECT: ', k[i], ': ',  v[i],'; ', 'CORRECT: ', k1[i],':',  v1[i])
 #     except:
 #         print(k1[i],': ', v1[i])
-with open('stop_words.txt', mode='a', encoding='utf-8') as f:
-    for line in newdict:
-        f.write(line.split(':')[1].strip() + '\n')
+
+# with open('stop_words.txt', mode='a', encoding='utf-8') as f:
+#     for line in newdict:
+#         f.write(line.split(':')[1].strip() + '\n')
